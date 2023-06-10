@@ -10,5 +10,5 @@ app.get('/', async (req, res) => {
 	res.json(data)
 })
 
-const PORT = 80;
+const PORT = 8000;
 app.listen(PORT, () => console.log(PORT))
