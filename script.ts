@@ -1,14 +1,15 @@
-import express from 'npm:express'
-import cors from 'npm:cors'
+import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
+import { oakCors } from "https://deno.land/x/cors/mod.ts";
 
-const app = express()
-app.use(cors())
-app.use(express.json())
+const router = new Router();
+router
+  .get("/", async () => {
+    await send('hi')
+  })
 
-app.get('/', async (req, res) => {
-	const data = await (await fetch('https://nycpokemap.com/raids.php')).json()
-	res.json(data)
-})
+const app = new Application();
+app.use(oakCors()); // Enable CORS for All Routes
+app.use(router.routes());
 
-const PORT = 8000;
-app.listen(PORT, () => console.log(PORT))
+console.info("CORS-enabled web server listening on port 8000");
+await app.listen({ port: 8000 });
