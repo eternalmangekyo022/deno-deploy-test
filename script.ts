@@ -11,7 +11,7 @@ books.set("1", {
 const router = new Router();
 router
   .get("/", async (context) => {
-    await send(context, context.request.url.pathname, 'fesfsef'
+    context.response.body = 'fesfsef'
   })
 
 const app = new Application();
