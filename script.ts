@@ -11,19 +11,8 @@ books.set("1", {
 const router = new Router();
 router
   .get("/", async (context) => {
-    await send(context, context.request.url.pathname, {
-      root: `${Deno.cwd()}/static`,
-      index: "index.html",
-    });
+    await send(context, context.request.url.pathname, 'fesfsef
   })
-  .get("/book", (context) => {
-    context.response.body = Array.from(books.values());
-  })
-  .get("/book/:id", (context) => {
-    if (context.params && context.params.id && books.has(context.params.id)) {
-      context.response.body = books.get(context.params.id);
-    }
-  });
 
 const app = new Application();
 app.use(oakCors()); // Enable CORS for All Routes
