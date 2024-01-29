@@ -1,15 +1,27 @@
-import { Application, Router, send } from "https://deno.land/x/oak/mod.ts";
-import { oakCors } from "https://deno.land/x/cors/mod.ts";
+import { WebSocketServer } from 'node:ws'
+//import axios from 'axios'
 
-const router = new Router();
-router
-  .get("/", async (context) => {
-    context.response.body = await (await fetch('https://nycpokemap.com/raids.php', { headers: { 'Content-Type': 'application/json' } })).json()
-  })
+const port = 3000;
+const ws = new WebSocketServer({ port }, () => console.log(port))
 
-const app = new Application();
-app.use(oakCors()); // Enable CORS for All Routes
-app.use(router.routes());
+const uuids = [];
 
-console.info("CORS-enabled web server listening on port 8000");
-await app.listen({ port: 8000 });
+
+ws.on('connection', s => {
+	s.loggedIn = false;
+
+	s.onmessage = ({ data }) => {
+		data = JSON.parse(data)
+		switch(data.type) {
+			case 'login':
+				console.log(Object.keys(data))
+				break
+			
+			case 'message':
+				s.send(`You sent ${data.content}`)
+				console.log(`=> ${data.content}`)
+				break
+		}
+	}
+	s.onclose = () => console.log('Closed')
+})
